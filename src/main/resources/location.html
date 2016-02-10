@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<head>
+  
+   <html>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+      <script type="text/javascript">
+         var watchID;
+         var geoLoc;
+         
+             
+      
+         function  GEO_error(){
+			alert("An error occured");
+		 }
+         function getLocationUpdate(){
+            if(navigator.geolocation){
+               // timeout at 60000 milliseconds (60 seconds)
+               var options = {timeout:60000};
+               geoLoc = navigator.geolocation;
+			   
+               watchID = geoLoc.watchPosition(function showLocation(position) {
+                 
+				 
+				  var latitude = position.coords.latitude;
+                  var longitude = position.coords.longitude;
+                  $.get( "latlng?lat=" + latitude + "&lng=" + longitude)
+			        .done(function(data) {
+                       $("#info").html(data);
+                  }).fail(function(data) {
+                      alert( "error could not retrieve data");
+						alert(data);
+                  });
+            
+			  
+			  }
+         , GEO_error);
+            } else { 
+               alert("Sorry, browser does not support geolocation!");
+            }
+         }
+      </script>
+      
+   </head>
+   <body>
+   
+      <form>
+         <input type="button" onclick="getLocationUpdate();" value="Watch Update"/>
+      </form>
+      
+      <form  method="get" action= LogOutServlet>
+      <input type=submit value=logout></input>
+      </form>
+      
+      <div id="info"></div>
+   </body>
+</html>
